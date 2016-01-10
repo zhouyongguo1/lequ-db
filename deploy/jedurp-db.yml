@@ -1,0 +1,15 @@
+---
+- hosts: jedurp-db
+
+  pre_tasks:
+    - name: extract build number from version
+      local_action: "shell echo {{ version }} | sed -E 's/[0-9]+\\.[0-9]+\\.//g'"
+      register: build_number_result
+
+  vars:
+    artifact_url: "{{ci_host}}/go/files/jedurp-db-migrations/{{ build_number_result.stdout }}/Commit/1/build/db/dist/jedurp-db-migrations-{{ version }}.zip"
+    site_dir: "D:\\wwwroot\\jedurp-db-migrations"
+    tmp_dir: "C:\\Users\\{{ansible_ssh_user}}\\AppData\\Local\\Temp"
+
+  roles:
+    - jedurp-db

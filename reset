@@ -1,0 +1,11 @@
+db_type="mysql"
+url_prefix="jdbc:mysql://127.0.0.1:3306"
+
+echo 'resetting lequ ...'
+./flyway -configFile=conf/flyway.$db_type.properties -url=$url_prefix/lequ_dev -locations=filesystem:./$db_type clean
+./flyway -configFile=conf/flyway.$db_type.properties -url=$url_prefix/lequ_dev -locations=filesystem:./$db_type migrate
+
+./flyway -configFile=conf/flyway.$db_type.properties -url=$url_prefix/lequ_test -locations=filesystem:./$db_type clean
+./flyway -configFile=conf/flyway.$db_type.properties -url=$url_prefix/lequ_test -locations=filesystem:./$db_type migrate
+
+echo "finished."

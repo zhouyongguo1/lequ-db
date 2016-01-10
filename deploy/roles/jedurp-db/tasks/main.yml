@@ -1,0 +1,30 @@
+---
+- include_vars: shared/vars/credentials.yml
+- include_vars: "{{ vars_file }}"
+
+- name: Check curl.exe exist
+  win_stat: path=C:\Program Files\cURL\bin\curl.exe
+  register: check_curl
+
+- name: Download curl.msi to 'C:\Users\{{ansible_ssh_user}}\AppData\Local\Temp'
+  win_get_url:
+    url: 'http://www.confusedbycode.com/curl/curl-7.38.0-win64.msi'
+    dest: '{{tmp_dir}}\\curl-7.38.0-win64.msi'
+    when: check_curl.stat.exists == false
+
+# Install an MSI file
+- win_msi: path='{{tmp_dir}}\\curl-7.38.0-win64.msi'
+  when: check_curl.stat.exists == false
+
+- name: download package={{version}}
+  raw: curl -u "{{ artifact_username }}:{{ artifact_password }}" -o {{tmp_dir}}\jedurp-db-migrations-{{ version }}.zip {{artifact_url}}
+  register: download_result
+
+- name: unzip package
+  unzip: src={{tmp_dir}}\jedurp-db-migrations-{{ version }}.zip dest={{ site_dir }}
+
+- name: reset database
+  raw: cmd.exe /c "pushd {{ site_dir }} & reset-edurp.bat"
+
+- name: remove downloaded package
+  raw: powershell Remove-Item {{tmp_dir}}\jedurp-db-migrations-{{ version }}.zip

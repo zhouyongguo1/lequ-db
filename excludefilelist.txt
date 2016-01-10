@@ -1,0 +1,5 @@
+excludefilelist.txt
+deploy
+.git
+.gitignore
+.gitattributes
