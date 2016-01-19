@@ -26,7 +26,7 @@ CREATE TABLE core_role (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`team_id` int unsigned NOT NULL,
 	`name` nvarchar(100) NOT NULL,
-	`status` varchar(50) NOT NULL,
+	`status` int unsigned NOT NULL,
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -64,8 +64,9 @@ CREATE TABLE core_event (
 
 CREATE TABLE core_invite (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
+	`team_id` int unsigned NOT NULL,
 	`name` nvarchar(100) DEFAULT NULL,
-	`status` varchar(50) NOT NULL,
+	`status` int unsigned NOT NULL,
 	`email` varchar(100) NOT NULL,
 	`role_id` int unsigned,
 	`content` nvarchar(500),
@@ -75,7 +76,8 @@ CREATE TABLE core_invite (
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` int unsigned DEFAULT NULL,
     `updated_by` int unsigned DEFAULT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+    FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -84,7 +86,7 @@ CREATE TABLE pro_project (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`team_id` int unsigned NOT NULL,
 	`name` nvarchar(100) NOT NULL,
-	`status` varchar(50) NOT NULL,
+	`status` int unsigned NOT NULL,
 	`icon` varchar(200),
 	`is_archived` tinyint(1) DEFAULT 0,
 	`is_del` tinyint(1) DEFAULT 0,
@@ -114,7 +116,7 @@ CREATE TABLE pro_user (
 	`user_id` int unsigned NOT NULL,
 	`role` varchar(50) NOT NULL,
 	`is_owner` tinyint(1) DEFAULT 0,
-	`status` varchar(50) NOT NULL,
+	`status` int unsigned NOT NULL,
 	PRIMARY KEY (`id`),
     FOREIGN KEY (`team_id`) REFERENCES core_team(`id`),
     FOREIGN KEY (`user_id`) REFERENCES core_user(`id`),
@@ -128,7 +130,7 @@ CREATE TABLE pro_task (
 	`project_id` int unsigned NOT NULL,
 	`name` nvarchar(100) NOT NULL,
 	`content` text,
-	`status` varchar(50) NOT NULL,
+	`status` int unsigned NOT NULL,
 	`points` int unsigned NOT NULL DEFAULT 0,
 	`owner_id` int unsigned DEFAULT NULL,
 	`is_archived` tinyint(1) DEFAULT 0,
@@ -164,7 +166,7 @@ CREATE TABLE pro_task_check (
 	`team_id` int unsigned NOT NULL,
 	`task_id` int unsigned NOT NULL,
 	`content` nvarchar(500) NOT NULL,
-	`status` varchar(50) NOT NULL,
+	`status` int unsigned NOT NULL,
 	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` int unsigned DEFAULT NULL,
