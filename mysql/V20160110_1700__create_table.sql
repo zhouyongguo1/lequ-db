@@ -1,13 +1,23 @@
+CREATE TABLE core_role (
+	`id` int unsigned NOT NULL AUTO_INCREMENT,
+	`team_id` int unsigned NOT NULL,
+	`name` nvarchar(100) NOT NULL,
+	`status` varchar(100) NOT NULL DEFAULT 'ACTIVE',
+	PRIMARY KEY (`id`),
+	FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE core_user (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
+	`team_id` int unsigned NOT NULL,
 	`name` nvarchar(100) NOT NULL,
-	`account` nvarchar(100) NOT NULL,
 	`pass` nvarchar(100) NOT NULL,
 	`email` varchar(100) NOT NULL,
-	`wechat` varchar(100) DEFAULT NULL,
-	`phone` varchar(50) DEFAULT NULL,	
 	`photo` varchar(200) DEFAULT NULL,	
+	`role_id` int unsigned DEFAULT NULL,
+	`permission` varchar(100) NOT NULL DEFAULT 'NONE',
+	`is_owner` tinyint(1) DEFAULT 0,
+	`status` varchar(100) NOT NULL DEFAULT 'ACTIVE',
 	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` int unsigned DEFAULT NULL,
@@ -23,30 +33,6 @@ CREATE TABLE core_user_config (
 	FOREIGN KEY (`user_id`) REFERENCES core_user(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE core_role (
-	`id` int unsigned NOT NULL AUTO_INCREMENT,
-	`team_id` int unsigned NOT NULL,
-	`name` nvarchar(100) NOT NULL,
-	`status` varchar(100) NOT NULL,
-	PRIMARY KEY (`id`),
-	FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE core_user_team (
-	`id` int unsigned NOT NULL AUTO_INCREMENT,
-	`team_id` int unsigned NOT NULL,
-	`user_id` int unsigned NOT NULL,
-	`role_id` int unsigned DEFAULT NULL,
-	`is_owner` tinyint(1) DEFAULT 0,
-	`created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `created_by` int unsigned DEFAULT NULL,
-    `updated_by` int unsigned DEFAULT NULL,
-	PRIMARY KEY (`id`),
-	FOREIGN KEY (`team_id`) REFERENCES core_team(`id`),
-	FOREIGN KEY (`user_id`) REFERENCES core_user(`id`),
-	FOREIGN KEY (`role_id`) REFERENCES core_role(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE core_event (

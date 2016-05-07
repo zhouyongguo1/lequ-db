@@ -1,18 +1,5 @@
 
-
-CREATE TABLE wf_template (
-	`id` int unsigned NOT NULL AUTO_INCREMENT,
-	`team_id` int unsigned NOT NULL,
-	`user_id` int unsigned NOT NULL,
-	`form_id` int unsigned NOT NULL,
-	`data` text,
-	PRIMARY KEY (`id`),
-	FOREIGN KEY (`user_id`) REFERENCES core_user(`id`),
-    FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE wf_workflow (
+CREATE TABLE wf_Instance (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`team_id` int unsigned NOT NULL,
 	`user_id` int unsigned NOT NULL,
@@ -31,10 +18,10 @@ CREATE TABLE wf_workflow (
     FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE wf_workflow_item (
+CREATE TABLE wf_Instance_item (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`team_id` int unsigned NOT NULL,
-	`workflow_id` int unsigned NOT NULL,
+	`instance_id` int unsigned NOT NULL,
 	`task_id` varchar(100) NOT NULL,
 	`user_id` int unsigned NOT NULL,
 	`status` varchar(100) NOT NULL,
@@ -45,7 +32,7 @@ CREATE TABLE wf_workflow_item (
     `updated_by` int unsigned DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`user_id`) REFERENCES core_user(`id`),
-	FOREIGN KEY (`workflow_id`) REFERENCES wf_workflow(`id`),
+	FOREIGN KEY (`instance_id`) REFERENCES wf_Instance(`id`),
     FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -53,7 +40,6 @@ CREATE TABLE wf_workflow_item (
 CREATE TABLE fm_template (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`name` varchar(100),
-	`html` text,
 	`fields` text,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -62,32 +48,25 @@ CREATE TABLE fm_template (
 CREATE TABLE fm_team_template (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`team_id` int unsigned NOT NULL,
-	`template_id` int unsigned NOT NULL,
-	`name` varchar(100),
-	`html` text,
+	`name` varchar(100) NOT NULL,
 	`fields` text,
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` int unsigned DEFAULT NULL,
     `updated_by` int unsigned DEFAULT NULL,
 	PRIMARY KEY (`id`),
-	FOREIGN KEY (`template_id`) REFERENCES fm_template(`id`),
     FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE fm_user_template (
+CREATE TABLE wf_template (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
 	`team_id` int unsigned NOT NULL,
-	`team_template_id` int unsigned NOT NULL,
 	`user_id` int unsigned NOT NULL,
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `created_by` int unsigned DEFAULT NULL,
-    `updated_by` int unsigned DEFAULT NULL,
+	`team_template_id` int unsigned NOT NULL,
+	`data` text,
 	PRIMARY KEY (`id`),
 	FOREIGN KEY (`user_id`) REFERENCES core_user(`id`),
-	FOREIGN KEY (`team_template_id`) REFERENCES fm_team_template(`id`),
     FOREIGN KEY (`team_id`) REFERENCES core_team(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -96,7 +75,6 @@ CREATE TABLE fm_form (
 	`id` int unsigned NOT NULL AUTO_INCREMENT,
     `team_id` int unsigned NOT NULL,
 	`team_template_id` int unsigned NOT NULL,
-	`html` text,
 	`fields` text,
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
